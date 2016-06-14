@@ -1,0 +1,69 @@
+/*capTexture OSL pattern*/
+/*
+Creates two layer masks which sets the position of the sparkle shader and the gold logo
+	Output Cout=Red where the diffuse white will be, blue where the sparkle will be and green where the gold logo will be
+	Output maskLogo=1.0 where gold shader
+	Output maskSparkle=1.0 where sparkle attributes should be
+*/
+
+shader capTexture(
+		color Cin=1,
+output color Cout=1,
+output float maskLogo=0,
+output float maskSparkle=0
+)
+
+{
+
+	float s;
+	float t;
+
+	/*Cylindrical Coordinates*/ 
+	point PP=transform("object",P);
+    vector d=normalize(PP);
+    s=0.5-atan2(d[1],d[0])/(2*M_PI);
+    t=d[2]; 
+	
+	float ss=s;
+	float tt=(t*0.11)+0.5;
+	
+	/*Load texture*/
+	color Ct;
+	Ct=texture("shaders/TopLogo.tx", ss,tt);
+	
+	/*Create perlin noise for sparkle layer*/
+	float repeatCount=100;
+	point PPs=transform("shader", P);
+	float noiseVal=noise("uperlin",PPs*repeatCount);
+	
+	/*If texture is white, no logo but possible sparkle*/
+	if (Ct[0]>0.5 && Ct[1]>0.5 && Ct[2]>0.5)
+	{
+	
+		Cout=color(1,0,0);
+		maskLogo=0;
+		
+		/*Sparkle layer if noise larger than 0.5*/
+		if (noiseVal>0.5)
+		{
+			maskSparkle=1;
+			Cout=color(0,0,1);
+		}
+		else
+		{
+			maskSparkle=0;
+		}
+		
+		
+	}
+	/*If black, gold logo layer*/
+	else
+	{
+		Cout=color(0,1,0);
+		maskLogo=1;
+		maskSparkle=0;
+		
+	}
+	
+	
+}

@@ -1,0 +1,30 @@
+/*cross OSL pattern*/
+/*
+Creates a cross on a patch
+	Input thickness=Sets the thickness of the lines of the cross
+	Output reflectColor=(0.9,0.9,0.9) for lines of cross, (0.4,0.4,0.4) for outside lines
+*/
+
+shader cross(
+	float thickness=0.2,
+output color reflectColor=1
+)
+{	
+	
+	point PP=transform("object", P);
+	
+	float halfThick=thickness/2.0;
+	
+	
+	float distS=abs(PP[0]-0.5);
+	float distT=abs(PP[1]-0.5);
+	
+	if (distS<=halfThick || distT<=halfThick)
+	{
+		reflectColor=color(0.9, 0.9, 0.9);
+	}
+	else 
+	{
+		reflectColor=color(0.4,0.4,0.4);
+	}
+}

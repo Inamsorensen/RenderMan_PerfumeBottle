@@ -1,0 +1,143 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.6.2dev
+shader capTexture
+param	color	Cin	1 1 1		%read{2147483647,-1} %write{2147483647,-1}
+oparam	color	Cout	1 1 1		%read{2147483647,-1} %write{34,41}
+oparam	float	maskLogo	0		%read{2147483647,-1} %write{35,42}
+oparam	float	maskSparkle	0		%read{2147483647,-1} %write{38,43}
+global	point	P	%read{1,16} %write{2147483647,-1} %derivs
+local	float	s	%read{10,10} %write{8,8} %derivs
+local	float	t	%read{11,11} %write{9,9} %derivs
+local	point	PP	%read{2,2} %write{1,1} %derivs
+local	vector	d	%read{3,9} %write{2,2} %derivs
+local	float	ss	%read{13,13} %write{10,10} %derivs
+local	float	tt	%read{13,13} %write{12,12} %derivs
+local	color	Ct	%read{19,29} %write{13,13}
+local	float	repeatCount	%read{17,17} %write{14,14}
+local	point	PPs	%read{17,17} %write{16,16}
+local	float	noiseVal	%read{36,36} %write{18,18}
+const	string	$const1	"object"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,15} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,16} %write{2147483647,-1}
+const	float	$const4	0.5		%read{8,36} %write{2147483647,-1}
+temp	float	$tmp1	%read{7,7} %write{5,5} %derivs
+const	int	$const5	1		%read{3,42} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{3,3} %derivs
+const	int	$const6	0		%read{4,43} %write{2147483647,-1}
+temp	float	$tmp3	%read{5,5} %write{4,4} %derivs
+const	int	$const7	2		%read{9,29} %write{2147483647,-1}
+const	float	$const8	3.1415927		%read{6,6} %write{2147483647,-1}
+temp	float	$tmp4	%read{7,7} %write{6,6} %derivs
+const	float	$const9	2		%read{6,6} %write{2147483647,-1}
+temp	float	$tmp5	%read{8,8} %write{7,7} %derivs
+const	float	$const10	0.11		%read{11,11} %write{2147483647,-1}
+temp	float	$tmp6	%read{12,12} %write{11,11} %derivs
+const	string	$const11	"shaders/TopLogo.tx"		%read{13,13} %write{2147483647,-1}
+const	int	$const12	100		%read{14,14} %write{2147483647,-1}
+const	string	$const13	"shader"		%read{16,16} %write{2147483647,-1}
+const	string	$const14	"uperlin"		%read{18,18} %write{2147483647,-1}
+temp	point	$tmp7	%read{18,18} %write{17,17}
+temp	float	$tmp8	%read{20,20} %write{19,19}
+temp	int	$tmp9	%read{21,21} %write{20,20}
+temp	int	$tmp10	%read{22,27} %write{21,26}
+temp	float	$tmp11	%read{24,24} %write{23,23}
+temp	int	$tmp12	%read{25,25} %write{24,24}
+temp	int	$tmp13	%read{26,26} %write{25,25}
+temp	int	$tmp14	%read{28,33} %write{27,32}
+temp	float	$tmp15	%read{30,30} %write{29,29}
+temp	int	$tmp16	%read{31,31} %write{30,30}
+temp	int	$tmp17	%read{32,32} %write{31,31}
+const	color	$const15	1 0 0		%read{34,34} %write{2147483647,-1}
+temp	int	$tmp18	%read{37,37} %write{36,36}
+const	color	$const16	0 0 1		%read{39,39} %write{2147483647,-1}
+const	color	$const17	0 1 0		%read{41,41} %write{2147483647,-1}
+code ___main___
+# capTexture.osl:21
+# 	point PP=transform("object",P);
+	functioncall	$const2 2 	%filename{"capTexture.osl"} %line{21} %argrw{"r"}
+# /opt/pixar/RenderManProServer-20.2/lib/osl/include/stdosl.h:243
+#         Kt = 0.0;
+	transform	PP $const3 $const1 P 	%filename{"/opt/pixar/RenderManProServer-20.2/lib/osl/include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# capTexture.osl:22
+#     vector d=normalize(PP);
+	normalize	d PP 	%filename{"capTexture.osl"} %line{22} %argrw{"wr"}
+# capTexture.osl:23
+#     s=0.5-atan2(d[1],d[0])/(2*M_PI);
+	compref		$tmp2 d $const5 	%line{23} %argrw{"wrr"}
+	compref		$tmp3 d $const6 	%argrw{"wrr"}
+	atan2		$tmp1 $tmp2 $tmp3 	%argrw{"wrr"}
+	mul		$tmp4 $const9 $const8 	%argrw{"wrr"}
+	div		$tmp5 $tmp1 $tmp4 	%argrw{"wrr"}
+	sub		s $const4 $tmp5 	%argrw{"wrr"}
+# capTexture.osl:24
+#     t=d[2]; 
+	compref		t d $const7 	%line{24} %argrw{"wrr"}
+# capTexture.osl:26
+# 	float ss=s;
+	assign		ss s 	%line{26} %argrw{"wr"}
+# capTexture.osl:27
+# 	float tt=(t*0.11)+0.5;
+	mul		$tmp6 t $const10 	%line{27} %argrw{"wrr"}
+	add		tt $tmp6 $const4 	%argrw{"wrr"}
+# capTexture.osl:31
+# 	Ct=texture("shaders/TopLogo.tx", ss,tt);
+	texture		Ct $const11 ss tt 	%line{31} %argrw{"wrrr"} %argderivs{2,3}
+# capTexture.osl:34
+# 	float repeatCount=100;
+	assign		repeatCount $const12 	%line{34} %argrw{"wr"}
+# capTexture.osl:35
+# 	point PPs=transform("shader", P);
+	functioncall	$const2 17 	%line{35} %argrw{"r"}
+# /opt/pixar/RenderManProServer-20.2/lib/osl/include/stdosl.h:243
+#     if (g >= 0.0) {
+	transform	PPs $const3 $const13 P 	%filename{"/opt/pixar/RenderManProServer-20.2/lib/osl/include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# capTexture.osl:36
+# 	float noiseVal=noise("uperlin",PPs*repeatCount);
+	mul		$tmp7 PPs repeatCount 	%filename{"capTexture.osl"} %line{36} %argrw{"wrr"}
+	noise		noiseVal $const14 $tmp7 	%argrw{"wrr"}
+# capTexture.osl:39
+# 	if (Ct[0]>0.5 && Ct[1]>0.5 && Ct[2]>0.5)
+	compref		$tmp8 Ct $const6 	%line{39} %argrw{"wrr"}
+	gt		$tmp9 $tmp8 $const4 	%argrw{"wrr"}
+	neq		$tmp10 $tmp9 $const6 	%argrw{"wrr"}
+	if		$tmp10 27 27 	%argrw{"r"}
+	compref		$tmp11 Ct $const5 	%argrw{"wrr"}
+	gt		$tmp12 $tmp11 $const4 	%argrw{"wrr"}
+	neq		$tmp13 $tmp12 $const6 	%argrw{"wrr"}
+	assign		$tmp10 $tmp13 	%argrw{"wr"}
+	neq		$tmp14 $tmp10 $const6 	%argrw{"wrr"}
+	if		$tmp14 33 33 	%argrw{"r"}
+	compref		$tmp15 Ct $const7 	%argrw{"wrr"}
+	gt		$tmp16 $tmp15 $const4 	%argrw{"wrr"}
+	neq		$tmp17 $tmp16 $const6 	%argrw{"wrr"}
+	assign		$tmp14 $tmp17 	%argrw{"wr"}
+	if		$tmp14 41 44 	%argrw{"r"}
+# capTexture.osl:42
+# 		Cout=color(1,0,0);
+	assign		Cout $const15 	%line{42} %argrw{"wr"}
+# capTexture.osl:43
+# 		maskLogo=0;
+	assign		maskLogo $const6 	%line{43} %argrw{"wr"}
+# capTexture.osl:46
+# 		if (noiseVal>0.5)
+	gt		$tmp18 noiseVal $const4 	%line{46} %argrw{"wrr"}
+	if		$tmp18 40 41 	%argrw{"r"}
+# capTexture.osl:48
+# 			maskSparkle=1;
+	assign		maskSparkle $const5 	%line{48} %argrw{"wr"}
+# capTexture.osl:49
+# 			Cout=color(0,0,1);
+	assign		Cout $const16 	%line{49} %argrw{"wr"}
+# capTexture.osl:53
+# 			maskSparkle=0;
+	assign		maskSparkle $const6 	%line{53} %argrw{"wr"}
+# capTexture.osl:61
+# 		Cout=color(0,1,0);
+	assign		Cout $const17 	%line{61} %argrw{"wr"}
+# capTexture.osl:62
+# 		maskLogo=1;
+	assign		maskLogo $const5 	%line{62} %argrw{"wr"}
+# capTexture.osl:63
+# 		maskSparkle=0;
+	assign		maskSparkle $const6 	%line{63} %argrw{"wr"}
+	end

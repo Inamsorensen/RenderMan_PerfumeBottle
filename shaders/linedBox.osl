@@ -1,0 +1,57 @@
+/*linedBox OSL pattern*/
+/*
+Creates pattern for rectangle lines
+	Input posT=Position of top line in object space
+	Input posB=Position of bottom line in object space
+	Input posL=Position of left line in object space
+	Input posR=Position of right line in object space
+	Input linewidth=Thickness of lines
+	
+	Output Cout=Red for lines, green for remaining surface
+	Output mask=Mask for PxrLMLayer to position gold shader
+	
+*/
+
+shader linedBox(
+	color Cin=1,
+	float posT=0.7,
+	float posB=0.3,
+	float posL=0.3,
+	float posR=0.7,
+	float linewidth=0.01,
+output color Cout=1,
+output float mask=0
+)
+{
+	float s=u;
+	float t=v;
+
+	color red=color(1.0,0.0,0.0);
+	color green=color(0.0,1.0,0.0);
+	
+		
+	float distT=abs(t-posT);
+	float distB=abs(t-posB);
+	float distL=abs(s-posL);
+	float distR=abs(s-posR);
+
+	/*Check uv coordinates against distance of lines from centre of surface*/
+	if(distT<=linewidth || distB<=linewidth || distL<=linewidth || distR<=linewidth)
+	{
+		if (t>=(posB-linewidth) && t<=(posT+linewidth) && s>=(posL-linewidth) && s<=(posR+linewidth))
+		{
+			Cout=red;
+			mask=1;
+		}
+		else
+		{
+			Cout=green;
+			mask=0;
+		}
+	}
+	else
+	{
+		Cout=green;
+		mask=0;
+	}
+}

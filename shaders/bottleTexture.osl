@@ -1,0 +1,49 @@
+/*bottleTexture OSL pattern*/
+/*
+Uses texture BottleLogo.tx to give textured logo on a patch
+	Output Cout=Red where glass will be rough, green where roughness equal to zero.
+	Output rough=Roughness value to give rougher glass where logo is
+	Output layer=Layer mask which gives 1.0 where the logo is
+*/
+
+shader bottleTexture(
+		color Cin=1,
+output color Cout=1,
+output float rough=0,
+output float layer=0
+)
+
+{
+
+	/*Position texture*/
+	float s=1.9*u;
+	float t=2.4*(1-v);
+	
+	color Ct;
+	
+	float ss=s-0.45;
+	float tt=t-0.43;
+	
+	/*Load texture*/
+	Ct=texture("shaders/BottleLogo.tx",ss,tt);
+	
+	rough=0;
+	
+	/*If white, set roughness to 0.75*/
+	if (Ct[0]>0.5 && Ct[1]>0.5 && Ct[2]>0.5)
+	{
+		Ct=color(0,1,0);
+		rough=0.75;
+		layer=1.0;
+	}	
+	
+	/*If black, set roughness to 0.0*/	
+	else 
+	{
+		Ct=color(1,1,1);
+		rough=0.0;
+		layer=0.0;
+	}
+	
+	Cout=Ct;
+}

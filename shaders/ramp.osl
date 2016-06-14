@@ -1,0 +1,45 @@
+/*ramp OSL pattern*/
+/*
+Creates ramp from edge to edgeDist
+	Input edgeDist=Distance from edge in object space where ramp ends
+	Input metallicCont=Metallic value where ramp ends, ie. max value
+	
+	Output Cout=Red for end of ramp, ie. max value of metallicCont, green for edges
+	Output metallic=Metallic value for PxrDisney shader
+	
+*/
+
+shader ramp(
+	color Cin=1,
+	float edgeDist=0.2,
+	float metallicCont=0.9,
+output float metallic=0.0,
+output color Cout=0
+)
+{
+	point PP=transform("object", P);
+	
+	float smoothCont;
+	
+	metallic=metallicCont;
+	
+	color red=color(1.0,0.0,0.0);
+	color green=color(0.0,1.0,0.0);
+	
+	Cout=red;
+	
+	if (PP[0]<=edgeDist)
+	{
+		smoothCont=smoothstep(0.0,edgeDist,PP[0]);
+		metallic=mix(0.0,metallicCont,smoothCont);
+		Cout=mix(green,red,smoothCont);
+	}
+	if (PP[0]>=(1.0-edgeDist))
+	{
+		smoothCont=smoothstep((1.0-edgeDist),1.0,PP[0]);
+		metallic=mix(0.0,metallicCont,(1.0-smoothCont));
+		Cout=mix(green,red,(1.0-smoothCont));
+	}
+
+
+}

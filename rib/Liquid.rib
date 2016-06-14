@@ -1,0 +1,20 @@
+##Liquid.rib 
+#Attributes and geometry read in for liquid inside bottle
+
+#Set intersect priority and different index of refraction from glass bottle
+Attribute "trace" "int intersectpriority" 1
+Attribute "shade" "float indexofrefraction" 1.3
+		
+#Liquid given a glass shader
+Bxdf "PxrGlass" "perfumeLiquid" "float ior" 1.3 
+			#"color reflectionColor" [1 1 1]
+			"color reflectionColor" [1 0.857 0.83]
+			"color transmissionColor" [1 0.857 0.83]
+			"float reflectionGain" 1.0
+			"float absorptionGain" 1.0
+			"color absorptionColor" [0.5 0.8 1]
+			"float roughness" [0.2]
+			
+	TransformBegin
+		ReadArchive "rib/Liquid_geometry.rib"
+	TransformEnd

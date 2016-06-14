@@ -1,0 +1,113 @@
+
+AttributeBegin
+	
+#Groundplate
+TransformBegin
+	Translate -2.5 2 -5
+	Scale 5 1 5
+	Rotate 90 1 0 0
+	Patch "bilinear" "P" [0 0 0
+						  1 0 0
+						  0 1 0
+						  1 1 0]	
+TransformEnd
+AttributeEnd
+
+AttributeBegin
+
+
+#Backplate
+TransformBegin
+	Translate -2.5 3 1
+	Scale 5 5 1
+	Patch "bilinear" "P" [0 0 0
+						  1 0 0
+						  0 1 0
+						  1 1 0]	
+TransformEnd
+
+#Leftplate
+TransformBegin
+	Translate -3.5 3 0
+	Scale 1 5 5
+	Rotate 90 0 1 0
+	Patch "bilinear" "P" [0 0 0
+						  1 0 0
+						  0 1 0
+						  1 1 0]
+TransformEnd
+
+#Rightplate
+TransformBegin
+	Translate 3.5 3 0
+	Scale 1 5 5
+	Rotate 90 0 1 0
+	Patch "bilinear" "P" [0 0 0
+						  1 0 0
+						  0 1 0
+						  1 1 0]
+TransformEnd
+
+#RightStandingEdge
+TransformBegin
+	Translate 2.5 5.5 0 
+	Scale 1 2.5 1 
+	Rotate -90 1 0 0
+	Cylinder 1 -1 1 -90
+TransformEnd 
+
+#LeftStandingEdge
+TransformBegin
+	Translate -2.5 5.5 0 
+	Scale 1 2.5 1 
+	Rotate -90 1 0 0
+	Rotate 180 0 0 1
+	Cylinder 1 -1 1 90
+TransformEnd 
+
+#FrontLyingEdge
+TransformBegin
+	Translate 0 3 0 
+	Scale 2.5 1 1 
+	Rotate -90 0 0 1
+	Rotate 90 1 0 0
+	Cylinder 1 -1 1 90
+TransformEnd 
+
+#RightLyingEdge
+TransformBegin
+	Translate 2.5 3 -2.5 
+	Scale 1 1 2.5 
+	Rotate -90 0 0 1
+	Cylinder 1 -1 1 90
+TransformEnd
+
+#LeftLyingEdge
+TransformBegin
+	Translate -2.5 3 -2.5 
+	Scale 1 1 2.5 
+	Rotate -90 0 0 1
+	Rotate 180 1 0 0
+	Cylinder 1 -1 1 90
+TransformEnd  
+
+#RightCorner
+TransformBegin
+	Translate 2.5 3 0
+	Scale 1 1 1 
+	Rotate 90 1 0 0
+	Sphere 1 0 1 90
+	
+TransformEnd
+
+#LeftCorner
+TransformBegin
+	Translate -2.5 3 0
+	Scale 1 1 1 
+	Rotate 90 1 0 0
+	Rotate 90 0 0 1
+	Sphere 1 0 1 90
+	
+TransformEnd
+
+AttributeEnd

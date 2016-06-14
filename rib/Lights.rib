@@ -1,0 +1,65 @@
+##Lights.rib
+# 3 point lighting condition with 2 lights for background
+
+#Make sure lights aren't visible in image or create shadows
+AttributeBegin
+
+	Attribute "visibility" "int camera" [0]
+	Attribute "visibility" "int indirect" [0] "int transmission" [0]
+		
+
+#OutlineLight - Disk
+TransformBegin
+	AreaLightSource "PxrStdAreaLight" "OutlineLightDisk" "string rman__Shape" ["disk"] "float exposure" [4] "float enableShadows" [0]
+	#"color lightColor" [1 0 0]
+	"color lightColor" [0.876 0.885 1]
+	Translate -2 10 2.5
+	Rotate 135 0 1 0
+	Rotate 90 1 0 0
+	Disk 0 3 360
+TransformEnd
+
+#FloodLight - PointLight
+TransformBegin
+	AreaLightSource "PxrStdAreaLight" "FloodLight" "string rman__Shape" ["sphere"] "float exposure" [5] "float enableShadows" [0]
+	#"color lightColor" [0 1 0]
+	"color lightColor" [0.98 0.98 0.856]
+	Translate -5.5 2.5 -5.5
+	Geometry "spherelight"
+TransformEnd
+
+	
+#KeyLight - Spotlight
+TransformBegin
+	AreaLightSource "PxrStdAreaLight" "KeyLight" "string rman__Shape" ["spot"] "float exposure" [8] 
+	"float coneAngle" [20]
+	#"color lightColor" [0 0 1]
+	"color lightColor" [1 1 0.876]
+	Translate 2.5 10 -2
+	Rotate -45 0 1 0
+	Rotate 75 1 0 0
+	Disk 0 2 360
+TransformEnd
+	
+#BackgroundLight1.1
+TransformBegin
+	AreaLightSource "PxrStdAreaLight" "BackgroundLight1.1" "string rman__Shape" ["disk"] "float exposure" [8]
+	#"color lightColor" [1 0 0]
+	"color lightColor" [1 1 1]
+	Translate 8 3 -2
+	Rotate -45 0 1 0
+	Disk 0 10 360
+TransformEnd
+
+#BackgroundLight1.2
+TransformBegin
+	AreaLightSource "PxrStdAreaLight" "BackgroundLight1.2" "string rman__Shape" ["disk"] "float exposure" [8] 
+	#"color lightColor" [1 0 0]
+	"color lightColor" [1 1 1]
+	Translate -8 3 -2
+	Rotate 45 0 1 0
+	Disk 0 10 360
+TransformEnd
+
+
+AttributeEnd

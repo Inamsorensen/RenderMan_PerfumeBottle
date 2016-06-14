@@ -1,0 +1,29 @@
+##GlassCapCylinder.rib
+# Setup for the part of the cap that is cylindrical/torus and made of glass
+
+#Set specific render attributes for glass
+Attribute "trace" "int maxspeculardepth" [6]
+Attribute "visibility" "constant int transmission" [1] "constant int indirect" [1]
+
+#Glass shader attributes			
+Bxdf "PxrLMGlass" "glassCorkCylinder" 
+			"color refractionColor" [1.0 1.0 1.0]
+			"color reflectionColor" [1.0 1.0 1.0]
+			"float roughness" [0.7]
+			"float eta" [1.4]
+			"int shadows" [1]
+			
+		#CapTorus
+			TransformBegin
+				Translate 0 2.625 0.75
+				Rotate 90 1 0 0
+				Torus 0.56 0.12 -180 180 360
+			TransformEnd
+		
+		#CapCylinder
+			TransformBegin
+				Translate 0 2.875 0.75
+				Scale 0.56 0.125 0.56
+				Rotate 90 1 0 0
+				Cylinder 1 -1 1 360
+			TransformEnd

@@ -1,0 +1,88 @@
+##Environment.rib
+#Creates infinity wall, patch behind camera and patch for ceiling which isn't connected to the infinity wall
+
+
+#InfinityWall
+#Turn 3 point lighting off for background
+AttributeBegin
+	Illuminate "KeyLight" 0
+	Illuminate "FloodLight" 0
+	Illuminate "OutlineLightDisk" 0
+	
+AttributeBegin
+	Bxdf "PxrDisney" "InfinityWall"
+		"color baseColor" [1.0 1.0 1.0]
+		
+TransformBegin
+
+	Translate 0 -8 0
+	Scale 6 3 10
+	ReadArchive "rib/InfinityWall_geometry.rib"
+		
+TransformEnd
+AttributeEnd
+
+#Create small mirror on floor to give reflection of bottle on the floor
+#Only a small patch because otherwise too much light reflection
+AttributeBegin
+	#Ramp shader used to slowly go from mirror effect to diffuse material so no hard edges
+	Pattern "PxrOSL" "MirrorBlendEffect" "string shader" "shaders/ramp"
+		"float edgeDist" [0.3]
+		
+	Bxdf "PxrDisney" "groundMirror"
+		"color baseColor" [1.0 1.0 1.0]
+		"reference float metallic" ["MirrorBlendEffect:metallic"]
+	
+	#Mirror geometry	
+	TransformBegin
+		Translate -1.75 -1.999 1.2
+		Scale 3.4 1 6
+		Patch "bilinear" "P" [0 0 0
+							  1 0 0
+							  0 0 -1
+							  1 0 -1]
+	TransformEnd
+AttributeEnd
+
+AttributeEnd
+
+#Backdrop for camera
+AttributeBegin
+	#Create cross on backdrop to give slightly more interesting reflection in gold lines on the main bottle
+	Pattern "PxrOSL" "CameraBackDrop" "string shader" "shaders/cross"
+		"float thickness" [0.05]
+		
+	Bxdf "PxrLMDiffuse" "cameraBackdrop"
+		"reference color frontColor" ["CameraBackDrop:reflectColor"]
+		"reference color backColor" ["CameraBackDrop:reflectColor"]
+	
+	#Backdrop geometry	
+	TransformBegin
+		Translate -20 -30 -25
+		Scale 40 40 40
+		Patch "bilinear" "P" [0 0 0
+							  1 0 0
+							  0 1 0
+							  1 1 0]
+	TransformEnd
+AttributeEnd
+
+#Ceiling
+AttributeBegin
+	
+	Bxdf "PxrLMDiffuse" "ceiling"
+		"color frontColor" [0.8 0.8 0.8]
+		"color backColor" [0.8 0.8 0.8]
+		
+	TransformBegin
+		Translate -20 10 0
+		Scale 40 40 40
+		Patch "bilinear" "P" [0 0 0
+							  1 0 0
+							  0 0 1
+							  1 0 1]
+	TransformEnd
+AttributeEnd
+			
+	
+WorldEnd

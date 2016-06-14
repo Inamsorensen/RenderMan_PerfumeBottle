@@ -1,0 +1,22 @@
+##RenderSettings.rib
+#Sets render settings for the render of the perfume bottle
+#Sampling value is high due to the glass shaders and the 5 lights in the scene
+#Uses PxrVCM integrator
+#Format set to 1280x720
+
+
+Option "limits" "bucketsize" [18 18]
+Format 1280 720 1
+
+ShadingInterpolation "smooth"
+
+PixelVariance 0
+Hider "raytrace"
+    "int incremental" [1]
+    "int maxsamples" [1024]
+Integrator "PxrVCM" "handle"
+    "int maxPathLength" [20]
+    "int mergePaths" [1] 
+
+Attribute "trace" "maxspeculardepth" 20   # 1 less than maxPathLength
+Attribute "trace" "maxdiffusedepth" 20

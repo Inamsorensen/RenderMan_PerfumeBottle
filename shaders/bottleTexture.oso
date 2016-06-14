@@ -1,0 +1,98 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.6.2dev
+shader bottleTexture
+param	color	Cin	1 1 1		%read{2147483647,-1} %write{2147483647,-1}
+oparam	color	Cout	1 1 1		%read{2147483647,-1} %write{28,28}
+oparam	float	rough	0		%read{2147483647,-1} %write{6,26}
+oparam	float	layer	0		%read{2147483647,-1} %write{24,27}
+global	float	u	%read{0,0} %write{2147483647,-1} %derivs
+global	float	v	%read{1,1} %write{2147483647,-1} %derivs
+local	float	s	%read{3,3} %write{0,0} %derivs
+local	float	t	%read{4,4} %write{2,2} %derivs
+local	color	Ct	%read{7,28} %write{5,25}
+local	float	ss	%read{5,5} %write{3,3} %derivs
+local	float	tt	%read{5,5} %write{4,4} %derivs
+const	float	$const1	1.9		%read{0,0} %write{2147483647,-1}
+const	float	$const2	2.4000001		%read{2,2} %write{2147483647,-1}
+const	int	$const3	1		%read{11,11} %write{2147483647,-1}
+temp	float	$tmp1	%read{2,2} %write{1,1} %derivs
+const	float	$const4	1		%read{1,24} %write{2147483647,-1}
+const	float	$const5	0.44999999		%read{3,3} %write{2147483647,-1}
+const	float	$const6	0.43000001		%read{4,4} %write{2147483647,-1}
+const	string	$const7	"shaders/BottleLogo.tx"		%read{5,5} %write{2147483647,-1}
+const	int	$const8	0		%read{6,19} %write{2147483647,-1}
+temp	float	$tmp2	%read{8,8} %write{7,7}
+const	float	$const9	0.5		%read{8,18} %write{2147483647,-1}
+temp	int	$tmp3	%read{9,9} %write{8,8}
+temp	int	$tmp4	%read{10,15} %write{9,14}
+temp	float	$tmp5	%read{12,12} %write{11,11}
+temp	int	$tmp6	%read{13,13} %write{12,12}
+temp	int	$tmp7	%read{14,14} %write{13,13}
+temp	int	$tmp8	%read{16,21} %write{15,20}
+const	int	$const10	2		%read{17,17} %write{2147483647,-1}
+temp	float	$tmp9	%read{18,18} %write{17,17}
+temp	int	$tmp10	%read{19,19} %write{18,18}
+temp	int	$tmp11	%read{20,20} %write{19,19}
+const	color	$const11	0 1 0		%read{22,22} %write{2147483647,-1}
+const	float	$const12	0.75		%read{23,23} %write{2147483647,-1}
+const	color	$const13	1 1 1		%read{25,25} %write{2147483647,-1}
+const	float	$const14	0		%read{26,27} %write{2147483647,-1}
+code ___main___
+# bottleTexture.osl:19
+# 	float s=1.9*u;
+	mul		s $const1 u 	%filename{"bottleTexture.osl"} %line{19} %argrw{"wrr"}
+# bottleTexture.osl:20
+# 	float t=2.4*(1-v);
+	sub		$tmp1 $const4 v 	%line{20} %argrw{"wrr"}
+	mul		t $const2 $tmp1 	%argrw{"wrr"}
+# bottleTexture.osl:24
+# 	float ss=s-0.45;
+	sub		ss s $const5 	%line{24} %argrw{"wrr"}
+# bottleTexture.osl:25
+# 	float tt=t-0.43;
+	sub		tt t $const6 	%line{25} %argrw{"wrr"}
+# bottleTexture.osl:28
+# 	Ct=texture("shaders/BottleLogo.tx",ss,tt);
+	texture		Ct $const7 ss tt 	%line{28} %argrw{"wrrr"} %argderivs{2,3}
+# bottleTexture.osl:30
+# 	rough=0;
+	assign		rough $const8 	%line{30} %argrw{"wr"}
+# bottleTexture.osl:33
+# 	if (Ct[0]>0.5 && Ct[1]>0.5 && Ct[2]>0.5)
+	compref		$tmp2 Ct $const8 	%line{33} %argrw{"wrr"}
+	gt		$tmp3 $tmp2 $const9 	%argrw{"wrr"}
+	neq		$tmp4 $tmp3 $const8 	%argrw{"wrr"}
+	if		$tmp4 15 15 	%argrw{"r"}
+	compref		$tmp5 Ct $const3 	%argrw{"wrr"}
+	gt		$tmp6 $tmp5 $const9 	%argrw{"wrr"}
+	neq		$tmp7 $tmp6 $const8 	%argrw{"wrr"}
+	assign		$tmp4 $tmp7 	%argrw{"wr"}
+	neq		$tmp8 $tmp4 $const8 	%argrw{"wrr"}
+	if		$tmp8 21 21 	%argrw{"r"}
+	compref		$tmp9 Ct $const10 	%argrw{"wrr"}
+	gt		$tmp10 $tmp9 $const9 	%argrw{"wrr"}
+	neq		$tmp11 $tmp10 $const8 	%argrw{"wrr"}
+	assign		$tmp8 $tmp11 	%argrw{"wr"}
+	if		$tmp8 25 28 	%argrw{"r"}
+# bottleTexture.osl:35
+# 		Ct=color(0,1,0);
+	assign		Ct $const11 	%line{35} %argrw{"wr"}
+# bottleTexture.osl:36
+# 		rough=0.75;
+	assign		rough $const12 	%line{36} %argrw{"wr"}
+# bottleTexture.osl:37
+# 		layer=1.0;
+	assign		layer $const4 	%line{37} %argrw{"wr"}
+# bottleTexture.osl:43
+# 		Ct=color(1,1,1);
+	assign		Ct $const13 	%line{43} %argrw{"wr"}
+# bottleTexture.osl:44
+# 		rough=0.0;
+	assign		rough $const14 	%line{44} %argrw{"wr"}
+# bottleTexture.osl:45
+# 		layer=0.0;
+	assign		layer $const14 	%line{45} %argrw{"wr"}
+# bottleTexture.osl:48
+# 	Cout=Ct;
+	assign		Cout Ct 	%line{48} %argrw{"wr"}
+	end

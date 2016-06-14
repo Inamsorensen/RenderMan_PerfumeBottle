@@ -1,0 +1,85 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.6.2dev
+shader ramp
+param	color	Cin	1 1 1		%read{2147483647,-1} %write{2147483647,-1}
+param	float	edgeDist	0.2		%read{7,17} %write{2147483647,-1}
+param	float	metallicCont	0.89999998		%read{2,21} %write{2147483647,-1}
+oparam	float	metallic	0		%read{2147483647,-1} %write{2,21}
+oparam	color	Cout	0 0 0		%read{2147483647,-1} %write{5,23}
+global	point	P	%read{1,1} %write{2147483647,-1}
+local	point	PP	%read{6,18} %write{1,1}
+local	float	smoothCont	%read{11,22} %write{10,19}
+local	color	red	%read{5,23} %write{3,3}
+local	color	green	%read{12,23} %write{4,4}
+const	string	$const1	"object"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,1} %write{2147483647,-1}
+const	color	$const4	1 0 0		%read{3,3} %write{2147483647,-1}
+const	color	$const5	0 1 0		%read{4,4} %write{2147483647,-1}
+const	int	$const6	0		%read{6,18} %write{2147483647,-1}
+temp	float	$tmp1	%read{7,7} %write{6,6}
+temp	int	$tmp2	%read{8,8} %write{7,7}
+const	float	$const7	0		%read{10,21} %write{2147483647,-1}
+temp	float	$tmp3	%read{10,10} %write{9,9}
+temp	float	$tmp4	%read{15,15} %write{13,13}
+const	float	$const8	1		%read{14,22} %write{2147483647,-1}
+temp	float	$tmp5	%read{15,15} %write{14,14}
+temp	int	$tmp6	%read{16,16} %write{15,15}
+temp	float	$tmp7	%read{19,19} %write{17,17}
+temp	float	$tmp8	%read{19,19} %write{18,18}
+temp	float	$tmp9	%read{21,21} %write{20,20}
+temp	float	$tmp10	%read{23,23} %write{22,22}
+code ___main___
+# ramp.osl:20
+# 	point PP=transform("object", P);
+	functioncall	$const2 2 	%filename{"ramp.osl"} %line{20} %argrw{"r"}
+# /opt/pixar/RenderManProServer-20.2/lib/osl/include/stdosl.h:243
+#         T = vector (0,0,0);
+	transform	PP $const3 $const1 P 	%filename{"/opt/pixar/RenderManProServer-20.2/lib/osl/include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# ramp.osl:24
+# 	metallic=metallicCont;
+	assign		metallic metallicCont 	%filename{"ramp.osl"} %line{24} %argrw{"wr"}
+# ramp.osl:26
+# 	color red=color(1.0,0.0,0.0);
+	assign		red $const4 	%line{26} %argrw{"wr"}
+# ramp.osl:27
+# 	color green=color(0.0,1.0,0.0);
+	assign		green $const5 	%line{27} %argrw{"wr"}
+# ramp.osl:29
+# 	Cout=red;
+	assign		Cout red 	%line{29} %argrw{"wr"}
+# ramp.osl:31
+# 	if (PP[0]<=edgeDist)
+	compref		$tmp1 PP $const6 	%line{31} %argrw{"wrr"}
+	le		$tmp2 $tmp1 edgeDist 	%argrw{"wrr"}
+	if		$tmp2 13 13 	%argrw{"r"}
+# ramp.osl:33
+# 		smoothCont=smoothstep(0.0,edgeDist,PP[0]);
+	compref		$tmp3 PP $const6 	%line{33} %argrw{"wrr"}
+	smoothstep	smoothCont $const7 edgeDist $tmp3 	%argrw{"wrrr"}
+# ramp.osl:34
+# 		metallic=mix(0.0,metallicCont,smoothCont);
+	mix		metallic $const7 metallicCont smoothCont 	%line{34} %argrw{"wrrr"}
+# ramp.osl:35
+# 		Cout=mix(green,red,smoothCont);
+	mix		Cout green red smoothCont 	%line{35} %argrw{"wrrr"}
+# ramp.osl:37
+# 	if (PP[0]>=(1.0-edgeDist))
+	compref		$tmp4 PP $const6 	%line{37} %argrw{"wrr"}
+	sub		$tmp5 $const8 edgeDist 	%argrw{"wrr"}
+	ge		$tmp6 $tmp4 $tmp5 	%argrw{"wrr"}
+	if		$tmp6 24 24 	%argrw{"r"}
+# ramp.osl:39
+# 		smoothCont=smoothstep((1.0-edgeDist),1.0,PP[0]);
+	sub		$tmp7 $const8 edgeDist 	%line{39} %argrw{"wrr"}
+	compref		$tmp8 PP $const6 	%argrw{"wrr"}
+	smoothstep	smoothCont $tmp7 $const8 $tmp8 	%argrw{"wrrr"}
+# ramp.osl:40
+# 		metallic=mix(0.0,metallicCont,(1.0-smoothCont));
+	sub		$tmp9 $const8 smoothCont 	%line{40} %argrw{"wrr"}
+	mix		metallic $const7 metallicCont $tmp9 	%argrw{"wrrr"}
+# ramp.osl:41
+# 		Cout=mix(green,red,(1.0-smoothCont));
+	sub		$tmp10 $const8 smoothCont 	%line{41} %argrw{"wrr"}
+	mix		Cout green red $tmp10 	%argrw{"wrrr"}
+	end

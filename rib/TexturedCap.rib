@@ -1,0 +1,35 @@
+##TexturedCap.rib
+#Attributes and cylinder geometry for textured part of cap
+
+#Pattern used to position material layers
+Pattern "PxrOSL" "corkTexturePattern" "string shader" "shaders/capTexture"
+
+#Set sparkle layer attributes; given indandescence to look like sparkle	
+Pattern "PxrLMLayer" "sparkleLayer" 
+			"reference float layerMask" ["corkTexturePattern:maskSparkle"]
+			"int specularBehavior" [0]
+			"color incandescence" [0.9 0.8 0.7]
+
+#Set logo layer attributes to give gold
+Pattern "PxrLMLayer" "LogoLayer"
+			"reference struct lmlayer" ["sparkleLayer:result"]
+			"reference float layerMask" ["corkTexturePattern:maskLogo"]
+			"color diffuseColor" [0.0 0.0 0.0]
+			"color specularColor" [1 0.765557 0.336057]
+			"color specularEta" [0.155 0.177 0.138]
+
+#Mix layers to overlap them
+Pattern "PxrLMMixer" "layerMixer"
+			"reference struct input0" ["sparkleLayer:result"]
+			"reference struct input1" ["LogoLayer:result"]			
+
+#Use diffuse layer for white, non-sparkly part of logo
+Bxdf "PxrLMDiffuse" "corkLogoMaterial" 
+			"reference struct lmlayer" ["layerMixer:result"]
+			
+		#Cylinder geometry
+		TransformBegin
+			Scale 0.56 0.25 0.56
+			Rotate 90 1 0 0
+			Cylinder 1 -1 1 360
+		TransformEnd

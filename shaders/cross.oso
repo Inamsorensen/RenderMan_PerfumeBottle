@@ -1,0 +1,63 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.6.2dev
+shader cross
+param	float	thickness	0.2		%read{2,2} %write{2147483647,-1}
+oparam	color	reflectColor	1 1 1		%read{2147483647,-1} %write{16,17}
+global	point	P	%read{1,1} %write{2147483647,-1}
+local	point	PP	%read{3,6} %write{1,1}
+local	float	halfThick	%read{9,12} %write{2,2}
+local	float	distS	%read{9,9} %write{5,5}
+local	float	distT	%read{12,12} %write{8,8}
+const	string	$const1	"object"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,1} %write{2147483647,-1}
+const	float	$const4	2		%read{2,2} %write{2147483647,-1}
+const	int	$const5	0		%read{3,13} %write{2147483647,-1}
+temp	float	$tmp1	%read{4,4} %write{3,3}
+const	float	$const6	0.5		%read{4,7} %write{2147483647,-1}
+temp	float	$tmp2	%read{5,5} %write{4,4}
+const	int	$const7	1		%read{6,6} %write{2147483647,-1}
+temp	float	$tmp3	%read{7,7} %write{6,6}
+temp	float	$tmp4	%read{8,8} %write{7,7}
+temp	int	$tmp5	%read{10,10} %write{9,9}
+temp	int	$tmp6	%read{11,15} %write{10,14}
+temp	int	$tmp7	%read{13,13} %write{12,12}
+temp	int	$tmp8	%read{14,14} %write{13,13}
+const	color	$const8	0.89999998 0.89999998 0.89999998		%read{16,16} %write{2147483647,-1}
+const	color	$const9	0.40000001 0.40000001 0.40000001		%read{17,17} %write{2147483647,-1}
+code ___main___
+# cross.osl:13
+# 	point PP=transform("object", P);
+	functioncall	$const2 2 	%filename{"cross.osl"} %line{13} %argrw{"r"}
+# /opt/pixar/RenderManProServer-20.2/lib/osl/include/stdosl.h:243
+#     vector R, T;
+	transform	PP $const3 $const1 P 	%filename{"/opt/pixar/RenderManProServer-20.2/lib/osl/include/stdosl.h"} %line{243} %argrw{"wrrr"}
+# cross.osl:15
+# 	float halfThick=thickness/2.0;
+	div		halfThick thickness $const4 	%filename{"cross.osl"} %line{15} %argrw{"wrr"}
+# cross.osl:18
+# 	float distS=abs(PP[0]-0.5);
+	compref		$tmp1 PP $const5 	%line{18} %argrw{"wrr"}
+	sub		$tmp2 $tmp1 $const6 	%argrw{"wrr"}
+	abs		distS $tmp2 	%argrw{"wr"}
+# cross.osl:19
+# 	float distT=abs(PP[1]-0.5);
+	compref		$tmp3 PP $const7 	%line{19} %argrw{"wrr"}
+	sub		$tmp4 $tmp3 $const6 	%argrw{"wrr"}
+	abs		distT $tmp4 	%argrw{"wr"}
+# cross.osl:21
+# 	if (distS<=halfThick || distT<=halfThick)
+	le		$tmp5 distS halfThick 	%line{21} %argrw{"wrr"}
+	neq		$tmp6 $tmp5 $const5 	%argrw{"wrr"}
+	if		$tmp6 12 15 	%argrw{"r"}
+	le		$tmp7 distT halfThick 	%argrw{"wrr"}
+	neq		$tmp8 $tmp7 $const5 	%argrw{"wrr"}
+	assign		$tmp6 $tmp8 	%argrw{"wr"}
+	if		$tmp6 17 18 	%argrw{"r"}
+# cross.osl:23
+# 		reflectColor=color(0.9, 0.9, 0.9);
+	assign		reflectColor $const8 	%line{23} %argrw{"wr"}
+# cross.osl:27
+# 		reflectColor=color(0.4,0.4,0.4);
+	assign		reflectColor $const9 	%line{27} %argrw{"wr"}
+	end

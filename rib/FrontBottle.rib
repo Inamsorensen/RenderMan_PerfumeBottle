@@ -1,0 +1,33 @@
+##FrontBottle.rib
+# Setup for the front patch of the bottle
+
+#Set patterns for logo texture (bottleTexture) and gold lines (linedBox)
+Pattern "PxrOSL" "BottleTexturePattern" "string shader" "shaders/bottleTexture"
+Pattern "PxrOSL" "BottleLineBoxPattern" "string shader" "shaders/linedBox" 
+			"float posT" [0.823]
+			"float posB" [0.4]
+			"float posL" [0.275]
+			"float posR" [0.723]
+			"float linewidth" [0.012]
+
+#Use PxrLMLayer to layer the gold lines on top of the glass shader			
+Pattern "PxrLMLayer" "goldLineLayer" 
+			"reference float layerMask" ["BottleLineBoxPattern:mask"]
+			"color diffuseColor" [0.0 0.0 0.0]
+			"color specularColor" [1 0.765557 0.336057]
+			"color specularEta" [0.155 0.177 0.138]
+
+#Glass shader for front face, roughness set by logo texture pattern			
+Bxdf "PxrLMGlass" "glassBottleShaderLogo" 
+			"reference struct lmlayer" ["goldLineLayer:result"]
+			"reference float roughness" ["BottleTexturePattern:rough"]
+			"int shadows" [1]
+			"color transmissionColor" [1.0 1.0 1.0]
+			"color reflectionColor" [1.0 1.0 1.0]
+			"color refractionColor" [0.9213550091 0.9213550091 0.9213550091]
+			"float eta" [1.5]
+			"int thin" [1]
+			
+	
+		#Read in front face geometry
+		ReadArchive "rib/FrontBottle_geometry.rib"

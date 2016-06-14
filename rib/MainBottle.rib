@@ -1,0 +1,38 @@
+##MainBottle.rib
+#Creates the main bottle with attributes and geometry
+
+#Overall attributes of bottle, ie. same for front face and remaining faces
+AttributeBegin
+	
+	#Set to give effect of liquid inside bottle with different index of refraction
+	Attribute "trace" "int intersectpriority" 2
+	Attribute "shade" "float indexofrefraction" 1.5
+	
+	#Set attribute options for displacements
+	Attribute "trace" "displacements" [ 1 ]
+	Attribute "displacementbound" "sphere" [30] "coordinatesystem" ["shader"]
+	
+	#Rendering attributes specific to glass bottle
+	Attribute "trace" "int maxspeculardepth" [6]
+	Attribute "visibility" "constant int transmission" [1] "constant int indirect" [4]
+	
+	#Create bevelled edges
+	Displacement "shaders/DiamondDisplacement" "float edgeBevel" [0.03]
+	
+	#Overall position of bottle
+	TransformBegin
+		Translate -1.65 -2 0
+		Scale 3.25 4 1.5
+		
+		#Front of bottle
+		AttributeBegin
+			ReadArchive "rib/FrontBottle.rib"
+		AttributeEnd
+		
+		#Remaining sides
+		AttributeBegin
+			ReadArchive "rib/RemainingBottle.rib"
+		AttributeEnd
+						 
+	TransformEnd
+AttributeEnd
