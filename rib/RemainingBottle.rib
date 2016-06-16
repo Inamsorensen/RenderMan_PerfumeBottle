@@ -5,7 +5,7 @@
 Bxdf "PxrLMGlass" "glassBottleShader"  
 			"int shadows" [1]
 			"int thin" [1]
-			"float roughness" [0.0]
+			"float roughness" [0.2]
 			"color transmissionColor" [1.0 1.0 1.0]
 			"color reflectionColor" [1.0 1.0 1.0]
 			"color refractionColor" [0.9213550091 0.9213550091 0.9213550091]

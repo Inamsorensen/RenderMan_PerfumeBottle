@@ -1,0 +1,16 @@
+##RenderMan RIB
+#renderRib/Perfume_turnTable_000.rib
+#Created by Ina M. Sorensen
+#Creates image of Chanel perfume bottle
+version 3.04
+ReadArchive "rib/RenderSettings.rib" 
+Display "images/Perfume_000.tiff" "it" "rgb" 
+ReadArchive "rib/WorldSettings.rib" 
+ReadArchive "rib/Lights.rib" 
+#PerfumeBottle
+TransformBegin 
+Rotate 180 0 1 0
+ReadArchive "rib/PerfumeBottle.rib" 
+TransformEnd 
+#Environment
+ReadArchive "rib/Environment.rib" 

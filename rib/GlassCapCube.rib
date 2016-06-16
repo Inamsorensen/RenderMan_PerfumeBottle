@@ -12,39 +12,59 @@ Attribute "visibility" "constant int transmission" [1] "constant int indirect" [
 #Create bevelled edges			
 Displacement "shaders/DiamondDisplacement" "float edgeBevel" [0.12]
 
-#Attributes for glass shader			
+#Attributes for glass shader
 Bxdf "PxrLMGlass" "glassCorkCube"
 			"color refractionColor" [1.0 1.0 1.0]
 			"color reflectionColor" [1.0 1.0 1.0]
 			"float roughness" [0.7]
 			"float eta" [1.4]
-			"int shadows" [1]
+			"int shadows" [1]		
 			
 		#Create cube using bilinear patches	
 		TransformBegin
 				Translate -1 2.9 0.06
 				Scale 2 0.8 1.375
 			
+				#Front
 				Patch "bilinear" "P" [0 0 0 
 									  1 0 0
 									  0 1 0
 									  1 1 0]
-				Patch "bilinear" "P" [0 0 1 
-									  1 0 1
-									  0 1 1
-									  1 1 1]
+				#Back
+				TransformBegin
+					Translate 1 0 1
+					Rotate 180 0 1 0
+					Patch "bilinear" "P" [0 0 0 
+									  1 0 0
+									  0 1 0
+									  1 1 0]
+				TransformEnd
+				
+				#Left
 				Patch "bilinear" "P" [0 0 0 
 									  0 1 0
 									  0 0 1
 									  0 1 1]
-				Patch "bilinear" "P" [1 0 0 
-									  1 1 0
-									  1 0 1
-									  1 1 1]
-				Patch "bilinear" "P" [0 0 0 
-									  1 0 0
-									  0 0 1
-									  1 0 1]
+				#Right
+				TransformBegin
+					Translate 1 0 1
+					Rotate 180 0 1 0
+					Patch "bilinear" "P" [0 0 0 
+										  0 1 0
+										  0 0 1
+										  0 1 1]
+				TransformEnd
+				
+				#Bottom
+				TransformBegin
+					Translate 0 1 1
+					Rotate 180 1 0 0
+					Patch "bilinear" "P" [0 1 0 
+										  1 1 0
+										  0 1 1
+										  1 1 1]
+				TransformEnd
+				#Top
 				Patch "bilinear" "P" [0 1 0 
 									  1 1 0
 									  0 1 1
